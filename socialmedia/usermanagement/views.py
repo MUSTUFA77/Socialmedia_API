@@ -10,24 +10,35 @@ from rest_framework.authtoken.models import Token
 
 # Views using APIView :-
 
-class UserListCreateAPIView(APIView):
-
-    def get(self, request):
-        users = User.objects.all()
-        serializer = UserSerializer(users, many=True)
-        return Response(serializer.data)
+class UserSignUpAPIView(APIView):
 
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
+            email = serializer.validated_data['email']
+            username = serializer.validated_data['username']
+
+            # Check if email already exists
+            if User.objects.filter(email=email).exists():
+                return Response({
+                    "success": False,
+                    "message": "Email already exists."
+                },status=status.HTTP_400_BAD_REQUEST)
+            # Check if username already exists
+            if User.objects.filter(username=username).exists():
+                return Response({
+                    "success": False, 
+                    "message": "Username already exists."
+                },status=status.HTTP_400_BAD_REQUEST)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class UserLoginAPIView(APIView):
+class UserLoginLogoutAPIView(APIView):
+
+    # Login Functionality
     def post(self,request):
         serializer = UserLoginSerializer(data = request.data)
-
         if serializer.is_valid():
             try:
                 user = User.objects.get(email = serializer.validated_data['email'])
@@ -47,7 +58,13 @@ class UserLoginAPIView(APIView):
                     "success":False,
                     "message":"user does not exist" 
                 })
-
+    # Logout Functionality   
+    def delete(self,request):
+        Token.objects.filter(user=request.user).delete()
+        return Response({
+            "success":True,
+            "message":"Logout Successful"
+        })
 class UserDetailAPIView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
