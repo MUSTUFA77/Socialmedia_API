@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from .models import User
-
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -18,3 +17,9 @@ class UserSerializer(serializers.ModelSerializer):
 class UserLoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField()
+
+from rest_framework import serializers
+
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)

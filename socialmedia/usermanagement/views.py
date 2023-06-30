@@ -3,9 +3,10 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView,status
-from .serializers import UserSerializer,UserLoginSerializer
+from .serializers import UserSerializer,UserLoginSerializer,ChangePasswordSerializer
 from .models import User
 from rest_framework.authtoken.models import Token
+from django.contrib.auth.hashers import check_password
 # Create your views here.
 
 # Views using APIView :-
@@ -86,3 +87,31 @@ class UserDetailAPIView(APIView):
         user = get_object_or_404(User, pk=pk)
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+class ChangePasswordAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = ChangePasswordSerializer
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            user = request.user
+            old_password = serializer.validated_data.get("old_password")
+            new_password = serializer.validated_data.get("new_password")
+
+            if old_password != user.password:
+                return Response({
+                    "success":False,
+                    "message": "Incorrect old password"
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+            user.password = new_password
+            print(new_password)
+            user.save()
+
+            return Response({
+                "success":True,
+                "message": "Password changed successfully"
+            }, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
