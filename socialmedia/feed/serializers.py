@@ -24,15 +24,15 @@ class CommentSerializer(serializers.ModelSerializer):
         return super().save(**kwargs)
     
 class PostSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Post
-        fields = "__all__"
+        class Meta:
+            model = Post
+            fields = '__all__'
 
-    title = serializers.CharField(required=True)
-    content = serializers.CharField(required=True)
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+        title = serializers.CharField(required=True)
+        content = serializers.CharField(required=True)
+        user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
-    def update(self, instance, validated_data):
-        if instance.user.id == validated_data["user"].id:
-            return super().update(instance, validated_data)
-
+        def update(self, instance, validated_data):
+            if instance.user.id == validated_data["user"].id:
+                return super().update(instance, validated_data)
+        
