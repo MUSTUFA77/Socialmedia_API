@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 #!/home/mustufa_bakrowala/Desktop/env/bin/python3
+=======
+#!/home/mustufa_bakrowala/Desktop/proj_env/bin/python3
+>>>>>>> 2078b6fbb49368a864705449d16d622480fa522f
 # -*- coding: utf-8 -*-
 import re
 import sys

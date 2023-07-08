@@ -8,7 +8,6 @@ from rest_framework import status
 from rest_framework.response import Response
 
 # Create your views here.
-
 # Using API Views
 
 class PostListCreateAPIView(APIView):
@@ -85,7 +84,7 @@ class PostLikeAPIView(APIView):
             post_like.delete()
             return Response({
                 "success": False,
-                "message": "Post unliked"
+                "message": "Post disliked"
             })
         else:
             return Response({
@@ -114,8 +113,7 @@ class PostCommentAPIView(APIView):
                 "success": True,
                 "message": "Comment added"
             })
-        else:
-            return Response(serializer.errors, status=400)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
     def delete(self,request,pk):
         comment = get_object_or_404(PostComment, pk=pk)

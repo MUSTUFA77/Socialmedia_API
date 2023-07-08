@@ -29,7 +29,11 @@ end
 # unset irrelevant variables
 deactivate nondestructive
 
+<<<<<<< HEAD
 set -gx VIRTUAL_ENV "/home/mustufa_bakrowala/Desktop/env"
+=======
+set -gx VIRTUAL_ENV "/home/mustufa_bakrowala/Desktop/proj_env"
+>>>>>>> 2078b6fbb49368a864705449d16d622480fa522f
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH
@@ -52,8 +56,13 @@ if test -z "$VIRTUAL_ENV_DISABLE_PROMPT"
         set -l old_status $status
 
         # Prompt override?
+<<<<<<< HEAD
         if test -n "(env) "
             printf "%s%s" "(env) " (set_color normal)
+=======
+        if test -n "(proj_env) "
+            printf "%s%s" "(proj_env) " (set_color normal)
+>>>>>>> 2078b6fbb49368a864705449d16d622480fa522f
         else
             # ...Otherwise, prepend env
             set -l _checkbase (basename "$VIRTUAL_ENV")
